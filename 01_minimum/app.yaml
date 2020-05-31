@@ -1,3 +1,6 @@
 runtime: nodejs12
 service: bot
 instance_class: F1
+
+includes:
+  - ./env.yaml

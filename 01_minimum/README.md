@@ -10,8 +10,8 @@ and open [Bot Framework Emulator](https://github.com/microsoft/botframework-emul
 ## Deploy to Google App Engine
 ```sh
 # edit MicrosoftAppId
-$ cp .env.sample .env
-$ vi .env
+$ cp env.sample.yaml env.yaml
+$ vi env.yaml
 
 # deploy
 $ yarn run deploy

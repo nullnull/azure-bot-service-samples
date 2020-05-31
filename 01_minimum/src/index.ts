@@ -11,7 +11,7 @@ const adapter = new BotFrameworkAdapter({
     appPassword: process.env.MicrosoftAppPassword
 });
 
-server.post('/api/messages', (req, res) => {    
+server.post('/api/messages', (req, res) => {
     adapter.processActivity(req, res, async (context) => {
         await context.sendActivity("Welcome!");
     });
