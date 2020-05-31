@@ -1,0 +1,51 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.5/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.5",
+  "version": "0.0.1",
+  "id": "MICROSOFT_APP_ID",
+  "packageName": "com.example.mybot",
+  "developer": {
+    "name": "YOUR_NAME",
+    "websiteUrl": "https://example.com/",
+    "privacyUrl": "https://example.com",
+    "termsOfUseUrl": "https://example.com/"
+  },
+  "name": {
+    "short": "MY_BOT_SHORT_NAME"
+  },
+  "description": {
+    "short": "SHORT_DESCRIPTION",
+    "full": "FULL_DESCRIPTION"
+  },
+  "icons": {
+    "outline": "32x32.png",
+    "color": "192x192.png"
+  },
+  "accentColor": "#FFFFFF",
+  "bots": [
+    {
+      "botId": "MICROSOFT_APP_ID",
+      "scopes": [ "team", "personal", "groupchat" ],
+      "commandLists": [
+        {
+          "scopes": [ "team" ],
+          "commands": [
+            {
+              "title": "SAMPLE_COMMAND_FOR_TEAMS",
+              "description": "DESCRIPTION_FOR_SAMPLE_COMMAND_FOR_TEAMS"
+            }
+          ]
+        },
+        {
+          "scopes": [ "personal", "groupchat" ],
+          "commands": [
+            {
+              "title": "SAMPLE_COMMAND",
+              "description": "DESCRIPTION_FOR_SAMPLE_COMMAND"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

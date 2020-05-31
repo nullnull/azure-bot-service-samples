@@ -9,10 +9,24 @@ and open [Bot Framework Emulator](https://github.com/microsoft/botframework-emul
 
 ## Deploy to Google App Engine
 ```sh
-# edit MicrosoftAppId
+# Edit MicrosoftAppId
 $ cp env.sample.yaml env.yaml
 $ vi env.yaml
 
-# deploy
+# Deploy
 $ yarn run deploy
+```
+
+## Install bot to Microsoft Teams
+```sh
+$ cd teams
+$ cp manifest.sample.json manifest.json
+
+# Edit MICROSOFT_APP_ID
+$ vi manifest.json
+
+# Zip
+$ zip archive.zip manifest.json 192x192.png 32x32.png
+
+# Upload archive.zip to your Microsoft Teams
 ```
