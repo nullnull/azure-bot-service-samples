@@ -1,20 +1,21 @@
 {
-  "main": "./dist/index.js",
-  "scripts": {
-      "dev": "nodemon --watch ./src -e ts --exec \"yarn run start\"",
-      "build": "tsc --build",
-      "start": "node ./dist/index.js",
-      "deploy": "yarn run build && gcloud app deploy",
-      "lint": "tslint 'src/**/*.ts'"
-  },
-  "dependencies": {
-      "botbuilder": "~4.9.0",
-      "restify": "~8.5.1"
-  },
-  "devDependencies": {
-      "@types/restify": "8.4.2",
-      "nodemon": "~2.0.4",
-      "tslint": "~6.1.2",
-      "typescript": "~3.9.2"
-  }
+    "main": "./dist/index.js",
+    "scripts": {
+        "dev": "nodemon --watch ./src -e ts --exec \"yarn run ts-node src/index.ts\"",
+        "build": "tsc --build",
+        "start": "node ./dist/index.js",
+        "deploy": "yarn run build && gcloud app deploy",
+        "lint": "tslint 'src/**/*.ts'"
+    },
+    "dependencies": {
+        "botbuilder": "~4.9.0",
+        "restify": "~8.5.1"
+    },
+    "devDependencies": {
+        "@types/restify": "8.4.2",
+        "nodemon": "~2.0.4",
+        "ts-node": "^8.10.2",
+        "tslint": "~6.1.2",
+        "typescript": "~3.9.2"
+    }
 }
