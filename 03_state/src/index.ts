@@ -1,5 +1,6 @@
 import * as restify from "restify";
 import { BotFrameworkAdapter } from "botbuilder";
+import { Bot } from "./bot";
 
 const server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, () => {
@@ -11,9 +12,11 @@ const adapter = new BotFrameworkAdapter({
   appPassword: process.env.MicrosoftAppPassword,
 });
 
+const bot = new Bot();
+
 server.post("/api/messages", (req, res) => {
   adapter.processActivity(req, res, async (context) => {
-    await context.sendActivity("Welcome!");
+    await bot.run(context);
   });
 });
 
