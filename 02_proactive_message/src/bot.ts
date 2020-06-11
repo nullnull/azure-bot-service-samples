@@ -1,49 +1,41 @@
-import { TeamsActivityHandler, TeamsInfo, TurnContext } from 'botbuilder';
+import {
+  TeamsActivityHandler,
+  TurnContext,
+  ConversationReference,
+} from "botbuilder";
+
+interface conversationReferences {
+  [k: string]: Partial<ConversationReference>;
+}
 
 export class Bot extends TeamsActivityHandler {
-    constructor(conversationReferences) {
-        super();
-        
-        this.onConversationUpdate(async (context, next) => {
-            console.log('onConversationUpdate called');
-            
-            addConversationReference(context.activity);
-            await next();
-        });
+  conversationReferences: conversationReferences;
 
-        this.onMessage(async (context, next) => {
-            console.log('onMessage called');
+  constructor() {
+    super();
 
-            const members = await TeamsInfo.getMembers(context);
-            console.log('teams members');
-            console.log({members});
+    this.conversationReferences = {};
 
-            addConversationReference(context.activity);
-            await context.sendActivity(`MyBot: You sent '${ context.activity.text }'`);
-            await next();
-        });
+    this.onConversationUpdate(async (context, next) => {
+      console.log("onConversationUpdate called");
+      this.addConversationReference(context.activity);
+      await next();
+    });
 
-        this.onMembersAdded(async (context, next) => {
-            console.log('onMembersAdded called');
-            
-            const members = await TeamsInfo.getMembers(context);
-            console.log('teams members');
-            console.log({members});
+    this.onMessage(async (context, next) => {
+      console.log("onMessage called");
+      this.addConversationReference(context.activity);
+      await context.sendActivity(`MyBot: You sent '${context.activity.text}'`);
+      await next();
+    });
+  }
 
-            const membersAdded = context.activity.membersAdded;
-            for (const member of membersAdded) {
-                // if (member.id !== context.activity.recipient.id) {
-                //     await context.sendActivity('Welcome to the Proactive Bot sample');
-                // }
-                await context.sendActivity('Welcome to the Proactive Bot sample');
-            }
-            // By calling next() you ensure that the next BotHandler is run.
-            await next();
-        });
-
-        function addConversationReference(activity): void {
-            const conversationReference = TurnContext.getConversationReference(activity);
-            conversationReferences[conversationReference.conversation.id] = conversationReference;
-        }
-    }
+  addConversationReference(activity): void {
+    const conversationReference = TurnContext.getConversationReference(
+      activity
+    );
+    this.conversationReferences[
+      conversationReference.conversation.id
+    ] = conversationReference;
+  }
 }
