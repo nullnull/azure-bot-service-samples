@@ -1,6 +1,5 @@
 import { TurnContext, UserState, StatePropertyAccessor } from "botbuilder";
 import {
-  ComponentDialog,
   DialogSet,
   DialogTurnStatus,
   TextPrompt,
@@ -8,13 +7,14 @@ import {
 } from "botbuilder-dialogs";
 
 import { QUESTION_2_DIALOG, Question2Dialog } from "./question2";
+import { CancelAndHelpDialog } from "./cancelAndHelpDialog";
 
 const QUESTION_PROMPT = "QUESTION_PROMPT";
 const USER_PROFILE = "USER_PROFILE";
 const WATERFALL_DIALOG = "WATERFALL_DIALOG";
 export const QUESTION_1_DIALOG = "QUESTION_1_DIALOG";
 
-export class Question1Dialog extends ComponentDialog {
+export class Question1Dialog extends CancelAndHelpDialog {
   userProfileState: StatePropertyAccessor<any>;
 
   constructor(userState: UserState) {
