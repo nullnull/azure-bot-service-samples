@@ -25,10 +25,10 @@
   "bots": [
     {
       "botId": "MICROSOFT_APP_ID",
-      "scopes": [ "team", "personal", "groupchat" ],
+      "scopes": ["team", "personal", "groupchat"],
       "commandLists": [
         {
-          "scopes": [ "team" ],
+          "scopes": ["team"],
           "commands": [
             {
               "title": "SAMPLE_COMMAND_FOR_TEAMS",
@@ -37,7 +37,7 @@
           ]
         },
         {
-          "scopes": [ "personal", "groupchat" ],
+          "scopes": ["personal", "groupchat"],
           "commands": [
             {
               "title": "SAMPLE_COMMAND",
@@ -47,5 +47,6 @@
         }
       ]
     }
-  ]
+  ],
+  "validDomains": ["token.botframework.com"]
 }
