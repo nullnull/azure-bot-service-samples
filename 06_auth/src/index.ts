@@ -1,6 +1,8 @@
 import * as restify from "restify";
 import { BotFrameworkAdapter } from "botbuilder";
 import { Bot } from "./bot";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 const server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, () => {

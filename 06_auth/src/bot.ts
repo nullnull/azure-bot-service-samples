@@ -4,7 +4,7 @@ import {
   ConversationState,
   UserState,
 } from "botbuilder";
-import { MainDialog } from "./dialog/main";
+import { MainDialog } from "./main";
 
 export class Bot extends TeamsActivityHandler {
   conversationState: any;
@@ -16,7 +16,7 @@ export class Bot extends TeamsActivityHandler {
     const memoryStorage = new MemoryStorage();
     this.conversationState = new ConversationState(memoryStorage);
     this.userState = new UserState(memoryStorage);
-    const dialog = new MainDialog(this.userState);
+    const dialog = new MainDialog();
     const dialogState = this.conversationState.createProperty("DialogState");
 
     this.onMessage(async (context, next) => {
