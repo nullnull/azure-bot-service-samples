@@ -1,20 +1,20 @@
 import {
-  ChoicePrompt,
   DialogSet,
   DialogTurnStatus,
   OAuthPrompt,
   TextPrompt,
   WaterfallDialog,
-  ComponentDialog,
 } from "botbuilder-dialogs";
+import { LogoutDialog } from "./logout";
 
 const MAIN_WATERFALL_DIALOG = "mainWaterfallDialog";
 const OAUTH_PROMPT = "oAuthPrompt";
 const TEXT_PROMPT = "textPrompt";
 
-export class MainDialog extends ComponentDialog {
+export class MainDialog extends LogoutDialog {
   constructor() {
-    super("MainDialog");
+    super("MainDialog", process.env.ConnectionName);
+
     this.addDialog(
       new OAuthPrompt(OAUTH_PROMPT, {
         connectionName: process.env.ConnectionName,
