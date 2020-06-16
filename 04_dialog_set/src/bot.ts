@@ -4,7 +4,9 @@ import {
   ConversationState,
   UserState,
 } from "botbuilder";
-import { Dialog } from "./dialog";
+import { DialogSet, DialogTurnStatus, TextPrompt } from "botbuilder-dialogs";
+
+const ASK_NAME = "ASK_NAME";
 
 export class Bot extends TeamsActivityHandler {
   conversationState: any;
@@ -16,13 +18,20 @@ export class Bot extends TeamsActivityHandler {
     const memoryStorage = new MemoryStorage();
     this.conversationState = new ConversationState(memoryStorage);
     this.userState = new UserState(memoryStorage);
-    const dialog = new Dialog(this.userState);
     const dialogState = this.conversationState.createProperty("DialogState");
+    const dialogSet = new DialogSet(dialogState);
+    dialogSet.add(new TextPrompt(ASK_NAME));
 
     this.onMessage(async (context, next) => {
-      console.log("Running dialog with Message Activity.");
+      const dialogContext = await dialogSet.createContext(context as any);
+      const results = await dialogContext.continueDialog();
 
-      await dialog.run(context, dialogState);
+      if (results.status === DialogTurnStatus.empty) {
+        await dialogContext.prompt(ASK_NAME, "名前を入力してね");
+      } else if (results.status === DialogTurnStatus.complete) {
+        context.sendActivity(`ようこそ、 ${results.result}さん`);
+      }
+
       await next();
     });
   }
