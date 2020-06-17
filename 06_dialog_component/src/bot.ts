@@ -3,8 +3,10 @@ import {
   MemoryStorage,
   ConversationState,
   UserState,
+  StatePropertyAccessor,
 } from "botbuilder";
 import { Dialog } from "./dialog";
+import { DialogState } from "botbuilder-dialogs";
 
 export class Bot extends TeamsActivityHandler {
   conversationState: any;
@@ -17,11 +19,9 @@ export class Bot extends TeamsActivityHandler {
     this.conversationState = new ConversationState(memoryStorage);
     this.userState = new UserState(memoryStorage);
     const dialog = new Dialog(this.userState);
-    const dialogState = this.conversationState.createProperty("DialogState");
+    const dialogState: StatePropertyAccessor<DialogState> = this.conversationState.createProperty("DialogState");
 
     this.onMessage(async (context, next) => {
-      console.log("Running dialog with Message Activity.");
-
       await dialog.run(context, dialogState);
       await next();
     });

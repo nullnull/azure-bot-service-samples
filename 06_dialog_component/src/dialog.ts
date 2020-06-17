@@ -6,40 +6,51 @@ import {
   DialogTurnStatus,
   TextPrompt,
   WaterfallDialog,
+  DialogState,
 } from "botbuilder-dialogs";
 
-const CONFIRM_PROMPT = "CONFIRM_PROMPT";
-const NAME_PROMPT = "NAME_PROMPT";
-const USER_PROFILE = "USER_PROFILE";
-const WATERFALL_DIALOG = "WATERFALL_DIALOG";
+interface StepValue {
+  name?: string;
+}
+
+const COMPONENT_DIALOG_ID = "COMPONENT_DIALOG_ID"
+const ASK_NAME_DIALOG_ID = "ASK_NAME_DIALOG_ID";
+const CONFIRM_NAME_DIALOG_ID = "CONFIRM_NAME_DIALOG_ID";
+const WATERFALL_DIALOG_ID = "WATERFALL_DIALOG_ID";
+const USER_PROFILE_PROPERTY_ID = "USER_PROFILE_PROPERTY_ID"
 
 export class Dialog extends ComponentDialog {
   userProfileState: StatePropertyAccessor<any>;
 
   constructor(userState: UserState) {
-    super("userProfileDialog");
+    super(COMPONENT_DIALOG_ID);
 
-    this.userProfileState = userState.createProperty(USER_PROFILE);
+    this.userProfileState = userState.createProperty(USER_PROFILE_PROPERTY_ID);
 
-    this.addDialog(new TextPrompt(NAME_PROMPT));
-    this.addDialog(new ConfirmPrompt(CONFIRM_PROMPT));
+    this.addDialog(new TextPrompt(ASK_NAME_DIALOG_ID));
+    this.addDialog(new ConfirmPrompt(CONFIRM_NAME_DIALOG_ID));
 
     this.addDialog(
-      new WaterfallDialog(WATERFALL_DIALOG, [
+      new WaterfallDialog(WATERFALL_DIALOG_ID, [
         this.nameStep.bind(this),
         this.confirmStep.bind(this),
         this.summaryStep.bind(this),
       ])
     );
 
-    this.initialDialogId = WATERFALL_DIALOG;
+    this.initialDialogId = WATERFALL_DIALOG_ID;
   }
 
-  async run(turnContext: TurnContext, dialogState: any) {
-    const dialogSet = new DialogSet(dialogState);
+  async run(turnContext: TurnContext, dialogState: StatePropertyAccessor<DialogState>) {
+    const dialogSet = new DialogSet(dialogState as any);
     dialogSet.add(this);
 
     const dialogContext = await dialogSet.createContext(turnContext as any);
+    console.log(dialogContext.stack);
+    if (dialogContext.stack.length > 0) {
+      console.log(dialogContext.stack[0].state.dialogs)
+    }
+    
     const results = await dialogContext.continueDialog();
     if (results.status === DialogTurnStatus.empty) {
       await dialogContext.beginDialog(this.id);
@@ -47,28 +58,26 @@ export class Dialog extends ComponentDialog {
   }
 
   async nameStep(step) {
-    return await step.prompt(NAME_PROMPT, "Please enter your name.");
+    return await step.prompt(ASK_NAME_DIALOG_ID, "名前を入力してね");
   }
 
   async confirmStep(step) {
-    step.values.name = step.result;
-    await step.context.sendActivity(`Thanks ${step.values.name}.`);
-    return await step.prompt(CONFIRM_PROMPT, "Do you want to keep your name?");
+    (step.values as StepValue).name = step.result;
+    return await step.prompt(
+      CONFIRM_NAME_DIALOG_ID,
+      `${(step.values as StepValue).name}さんで宜しいですか？`
+    );
   }
 
   async summaryStep(step) {
     if (step.result) {
-      await this.userProfileState.set(step.context, {
-        name: step.values.name,
-      });
       await step.context.sendActivity(
-        `OK. I'll remember your name ${step.values.name}`
+        `わかりました。${(step.values as StepValue).name}さん、こんにちは！`
       );
     } else {
-      await step.context.sendActivity("Thanks. Your profile will not be kept.");
+      await step.context.sendActivity("もう一度最初から処理をやり直します。");
     }
-
-    await step.context.sendActivity(`Finished`);
+  
     return await step.endDialog();
   }
 }
