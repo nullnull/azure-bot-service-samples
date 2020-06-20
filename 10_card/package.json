@@ -1,0 +1,30 @@
+{
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "nodemon --watch ./src -e ts --exec \"yarn run ts-node src/index.ts\"",
+    "build": "tsc --build",
+    "start": "node ./dist/index.js",
+    "deploy": "yarn run build && gcloud app deploy",
+    "lint": "tslint 'src/**/*.ts'"
+  },
+  "dependencies": {
+    "botbuilder": "~4.9.0",
+    "botbuilder-dialogs": "^4.9.2",
+    "restify": "~8.5.1"
+  },
+  "devDependencies": {
+    "@types/restify": "8.4.2",
+    "husky": "^4.2.5",
+    "nodemon": "~2.0.4",
+    "prettier": "^2.0.5",
+    "pretty-quick": "^2.0.1",
+    "ts-node": "^8.10.2",
+    "tslint": "~6.1.2",
+    "typescript": "~3.9.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  }
+}
