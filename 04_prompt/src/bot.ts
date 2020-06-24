@@ -22,9 +22,9 @@ export class Bot extends TeamsActivityHandler {
 
     this.onMessage(async (context, next) => {
       const dialogContext = await dialogSet.createContext(context as any);
-      const results = await dialogContext.continueDialog();
-      console.log(results);
+      console.log(dialogContext.stack);
 
+      const results = await dialogContext.continueDialog();
       if (results.status === DialogTurnStatus.empty) {
         await context.sendActivity(`名前を入力してね`);
         await dialogContext.beginDialog(ASK_NAME);
